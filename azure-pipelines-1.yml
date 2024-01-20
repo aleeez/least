@@ -26,14 +26,14 @@ stages:
         source antenv/bin/activate
         python -m pip install --upgrade pip
         pip install setup
-        pip install -r ipl_score_predictor/requirements.txt  # Adjust the path here
+        pip install -r ipl_score_predictor/requirements.txt  
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: 'ipl_score_predictor'  # Adjust the path here
+        rootFolderOrFile: 'ipl_score_predictor'
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
