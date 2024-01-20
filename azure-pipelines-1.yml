@@ -1,29 +1,12 @@
-# Python to Linux Web App on Azure
-# Build your Python project and deploy it to Azure as a Linux Web App.
-# Change python version to one thats appropriate for your application.
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
 trigger:
 - master
 
 variables:
-  # Azure Resource Manager connection created during pipeline creation
   azureServiceConnectionId: '3e4ba5f7-6759-429e-817c-d5b3da74cc2a'
-
-  # Web app name
   webAppName: 'gaim2137-webapp'
-
-  # Agent VM image name
   vmImageName: 'ubuntu-latest'
-
-  # Environment name
   environmentName: 'gaim2137-webapp'
-
-  # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
-
-  # Python version: 3.7
-  pythonVersion: '3.7'
 
 stages:
 - stage: Build
@@ -35,22 +18,22 @@ stages:
     steps:
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: '$(pythonVersion)'
-      displayName: 'Use Python $(pythonVersion)'
+        versionSpec: '3.7'
+      displayName: 'Use Python 3.7'
 
     - script: |
         python -m venv antenv
         source antenv/bin/activate
         python -m pip install --upgrade pip
         pip install setup
-        pip install -r requirements.txt
+        pip install -r ipl_score_predictor/requirements.txt  # Adjust the path here
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: '$(projectRoot)'
+        rootFolderOrFile: 'ipl_score_predictor'  # Adjust the path here
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
@@ -76,8 +59,8 @@ stages:
 
           - task: UsePythonVersion@0
             inputs:
-              versionSpec: '$(pythonVersion)'
-            displayName: 'Use Python version'
+              versionSpec: '3.7'
+            displayName: 'Use Python 3.7'
 
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App : gaim2137-webapp'
